@@ -11,9 +11,16 @@ function App() {
     setPage(index);
   };
 
+  const prevPage = () => {
+    setPage((oldPage) => (oldPage === 0 ? data.length - 1 : oldPage - 1));
+  };
+  const nextPage = () => {
+    setPage((oldPage) => (oldPage === data.length - 1 ? 0 : oldPage + 1));
+  };
+
   useEffect(() => {
     if (loading) return;
-    setFollowers(data[page - 1]);
+    setFollowers(data[page]);
   }, [loading, page]);
 
   return (
@@ -31,10 +38,7 @@ function App() {
         </div>
         {!loading && (
           <div className="btn-container">
-            <button
-              className="prev-btn btn"
-              onClick={() => handlePage(page - 1)}
-            >
+            <button className="prev-btn btn" onClick={prevPage}>
               prev
             </button>
             {data.map((_, index) => (
@@ -46,10 +50,7 @@ function App() {
                 {index + 1}
               </button>
             ))}
-            <button
-              className="next-btn btn"
-              onClick={() => handlePage(page + 1)}
-            >
+            <button className="next-btn btn" onClick={nextPage}>
               next
             </button>
           </div>
