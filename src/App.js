@@ -7,21 +7,14 @@ function App() {
   const [page, setPage] = useState(6);
   const [followers, setFollowers] = useState([]);
 
-  const generatePagesButtons = () => {
-    const buttons = [];
-    for (let i = 1; i <= data.length; i++) buttons[i] = i;
-    return buttons;
-  };
-
-  const hanldePaginate = (index) => {
+  const handlePage = (index) => {
     setPage(index);
-    setFollowers(data[index - 1]);
   };
 
   useEffect(() => {
     if (loading) return;
     setFollowers(data[page - 1]);
-  }, [loading]);
+  }, [loading, page]);
 
   return (
     <main>
@@ -36,29 +29,31 @@ function App() {
               return <Follower key={item.id} {...item} />;
             })}
         </div>
-        <div className="btn-container">
-          <button
-            className="prev-btn btn"
-            onClick={() => hanldePaginate(page - 1)}
-          >
-            prev
-          </button>
-          {generatePagesButtons().map((index) => (
+        {!loading && (
+          <div className="btn-container">
             <button
-              key={index}
-              className={`page-btn btn ${page === index ? "active-btn" : ""}`}
-              onClick={() => hanldePaginate(index)}
+              className="prev-btn btn"
+              onClick={() => handlePage(page - 1)}
             >
-              {index}
+              prev
             </button>
-          ))}
-          <button
-            className="next-btn btn"
-            onClick={() => hanldePaginate(page + 1)}
-          >
-            next
-          </button>
-        </div>
+            {data.map((_, index) => (
+              <button
+                key={index}
+                className={`page-btn ${index === page ? "active-btn" : ""}`}
+                onClick={() => handlePage(index)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="next-btn btn"
+              onClick={() => handlePage(page + 1)}
+            >
+              next
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );
